@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synapse | Intelligent Quiz Engine</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-mesh"></div>
+    
+    <div class="app-container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active">
+            <h1>Synapse</h1>
+            <p>Adaptive learning powered by Hybrid IRT & BKT</p>
+            <div class="card info-card">
+                <h3>How it works</h3>
+                <ul>
+                    <li><strong>Diagnostic Phase:</strong> First 5 questions map your initial ability (θ).</li>
+                    <li><strong>Practice Phase:</strong> Remaining questions track your concept mastery dynamically.</li>
+                </ul>
+            </div>
+            <button id="start-btn" class="primary-btn">Start Assessment</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="screen">
+            <header>
+                <div class="progress-bar">
+                    <div id="progress" class="progress-fill"></div>
+                </div>
+                <div class="status-bar">
+                    <span id="phase-badge" class="badge">Diagnostic</span>
+                    <span id="question-counter">Question 1/30</span>
+                </div>
+            </header>
+            
+            <main>
+                <div class="question-card glass-panel">
+                    <h2 id="question-text">Loading question...</h2>
+                    <div id="options-container" class="options-grid">
+                        <!-- Options injected here -->
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen">
+            <header>
+                <h2>Assessment Complete</h2>
+                <div class="theta-badge">Ability (θ): <span id="theta-score">0.00</span></div>
+            </header>
+            
+            <div class="results-grid">
+                <div class="glass-panel summary-panel">
+                    <h3>Mastery Summary</h3>
+                    <div id="mastery-bars" class="bars-container">
+                        <!-- Mastery bars injected here -->
+                    </div>
+                </div>
+                
+                <div class="glass-panel suggestions-panel">
+                    <h3>AI Suggestions</h3>
+                    <ul id="suggestions-list">
+                        <!-- Suggestions injected here -->
+                    </ul>
+                </div>
+            </div>
+            
+            <button id="restart-btn" class="secondary-btn">Retake Assessment</button>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
