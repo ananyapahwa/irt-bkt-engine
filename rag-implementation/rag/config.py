@@ -39,9 +39,6 @@ CHROMA_COLLECTION_NAME = "ncert_class9_science"
 _default_db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "chroma_db")
 CHROMA_PERSIST_DIR = os.environ.get("CHROMA_PERSIST_DIR", _default_db_path)
 
-# ── LLM Configuration ─────────────────────────────────────────────────────────
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-if not GEMINI_API_KEY:
-    print("WARNING: GEMINI_API_KEY is not set. The tutor will not work without it.")
-
-GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+# ── LLM Configuration (Ollama) ────────────────────────────────────────────────
+OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3.1:8b")
