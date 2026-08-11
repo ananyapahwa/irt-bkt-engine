@@ -34,7 +34,7 @@ with open("./bkt-engine/demo_ui/questions.json", "w") as f:
     json.dump(questions, f, indent=2)
 
 # Read Concepts
-df_concepts = pd.read_excel("./irt-engine/data/Synapse_KG_Concepts.xlsx", header=0)
+df_concepts = pd.read_excel("./irt-engine/data/Synapse_KG_Concepts.xlsx", sheet_name="02_KG_Concepts", header=1)
 concepts = []
 for index, row in df_concepts.iterrows():
     if pd.isna(row.get('concept_id')):
@@ -44,4 +44,15 @@ for index, row in df_concepts.iterrows():
 with open("./bkt-engine/demo_ui/concepts.json", "w") as f:
     json.dump(concepts, f, indent=2)
 
-print(f"Parsed {len(questions)} questions and {len(concepts)} concepts successfully.")
+# Read Edges
+df_edges = pd.read_excel("./irt-engine/data/Synapse_KG_Concepts.xlsx", sheet_name="03_Prerequisite_Edges", header=1)
+edges = []
+for index, row in df_edges.iterrows():
+    if pd.isna(row.get('from_concept_id')):
+        continue
+    edges.append(row.to_dict())
+
+with open("./bkt-engine/demo_ui/edges.json", "w") as f:
+    json.dump(edges, f, indent=2)
+
+print(f"Parsed {len(questions)} questions, {len(concepts)} concepts, and {len(edges)} edges successfully.")

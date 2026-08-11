@@ -1,0 +1,15 @@
+# RAG engine
+chromadb>=0.4.0
+sentence-transformers>=2.2.0
+google-generativeai>=0.8.0
+
+# Service
+fastapi>=0.100.0
+uvicorn>=0.23.0
+pydantic>=2.0
+
+# Env loading
+python-dotenv>=1.0
+
+# Testing
+pytest>=7.4

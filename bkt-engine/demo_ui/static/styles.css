@@ -247,3 +247,107 @@ button {
     border-radius: 4px 8px 8px 4px;
     margin-bottom: 1rem;
 }
+
+/* Tutor Interventions */
+.tutor-panel {
+    border-color: rgba(236, 72, 153, 0.3);
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+}
+
+.intervention-card {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+
+
+.concept-badge {
+    background: rgba(236, 72, 153, 0.2);
+    color: #f472b6;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.chat-bubbles {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.chat-bubble {
+    padding: 1rem;
+    border-radius: 12px;
+    max-width: 85%;
+    position: relative;
+    line-height: 1.5;
+}
+
+.bubble-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.student-bubble {
+    align-self: flex-end;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom-right-radius: 2px;
+}
+
+.student-bubble .bubble-label {
+    text-align: right;
+    color: var(--text-secondary);
+}
+
+.ai-bubble {
+    align-self: flex-start;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-bottom-left-radius: 2px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.ai-bubble .bubble-label {
+    color: #818cf8;
+}
+
+.misconception-badge {
+    display: inline-block;
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
+    text-transform: capitalize;
+}
+
+.mastery-micro-badge {
+    display: inline-block;
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.intervention-header {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
