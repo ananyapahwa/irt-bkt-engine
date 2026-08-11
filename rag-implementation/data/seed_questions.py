@@ -43,6 +43,56 @@ def get_tagged_questions():
             "B": "misinterprets_VI_slope_as_conductance",
             "C": "confuses_resistance_with_voltage",
             "D": "thinks_slope_unrelated_to_resistance"
+        },
+        "q_6": {
+            "A": "multiplied_voltage_and_current",
+            "C": "divided_current_by_voltage",
+            "D": "ignored_current_value"
+        },
+        "q_7": {
+            "A": "forgot_to_square_current_and_didnt_convert_time",
+            "B": "forgot_to_convert_minutes_to_seconds",
+            "D": "forgot_to_square_current"
+        },
+        "q_8": {
+            "B": "math_error_in_kwh_conversion",
+            "C": "incorrect_metric_prefix_conversion",
+            "D": "forgot_to_multiply_by_days"
+        },
+        "q_9": {
+            "A": "ignored_other_series_resistors_used_only_six",
+            "C": "used_largest_resistor_only",
+            "D": "confused_parallel_and_series_current_rules"
+        },
+        "q_10": {
+            "A": "used_series_formula_for_parallel",
+            "B": "averaged_resistances",
+            "D": "multiplied_resistances_without_dividing"
+        },
+        "q_11": {
+            "A": "forgot_area_changes_when_stretched",
+            "B": "thought_longer_wire_has_less_resistance",
+            "D": "divided_instead_of_multiplying_by_four"
+        },
+        "q_12": {
+            "A": "thinks_parallel_lowers_voltage",
+            "C": "thinks_parallel_reduces_total_current",
+            "D": "thinks_its_just_for_wiring_convenience"
+        },
+        "q_13": {
+            "A": "thinks_fuse_is_variable_resistor",
+            "C": "thinks_broken_fuse_conducts",
+            "D": "thinks_fuse_regulates_current"
+        },
+        "q_14": {
+            "A": "confuses_earth_with_neutral",
+            "C": "thinks_earth_saves_energy",
+            "D": "misunderstands_basic_circuit_roles"
+        },
+        "q_15": {
+            "A": "believes_in_magnetic_monopoles",
+            "C": "thinks_cutting_destroys_magnetism",
+            "D": "thinks_poles_are_unequal"
         }
     }
     
