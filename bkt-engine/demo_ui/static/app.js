@@ -14,6 +14,7 @@ const screens = {
 
 const ui = {
     startBtn: document.getElementById('start-btn'),
+    simulateBtn: document.getElementById('simulate-struggling-btn'),
     restartBtn: document.getElementById('restart-btn'),
     questionText: document.getElementById('question-text'),
     optionsContainer: document.getElementById('options-container'),
@@ -22,11 +23,14 @@ const ui = {
     phaseBadge: document.getElementById('phase-badge'),
     thetaScore: document.getElementById('theta-score'),
     masteryBars: document.getElementById('mastery-bars'),
-    suggestionsList: document.getElementById('suggestions-list')
+    suggestionsList: document.getElementById('suggestions-list'),
+    tutorPanel: document.getElementById('tutor-panel'),
+    tutorInterventionsList: document.getElementById('tutor-interventions-list')
 };
 
 // Event Listeners
 ui.startBtn.addEventListener('click', startQuiz);
+ui.simulateBtn.addEventListener('click', simulateStruggling);
 ui.restartBtn.addEventListener('click', resetQuiz);
 
 async function fetchQuestions() {
@@ -37,6 +41,32 @@ async function fetchQuestions() {
         console.error("Failed to load questions:", err);
         alert("Failed to load quiz data. Ensure the backend is running.");
     }
+}
+
+async function simulateStruggling() {
+    ui.simulateBtn.textContent = 'Simulating...';
+    if (questions.length === 0) {
+        await fetchQuestions();
+    }
+    
+    if (questions.length === 0) return;
+    
+    // Create synthetic answers that drop mastery across concepts
+    answers = questions.map((q, i) => {
+        const isCorrect = i < 3;
+        // Pick a wrong option for incorrect answers
+        const optKeys = Object.keys(q.options || {});
+        const wrongOpts = optKeys.filter(k => k !== q.correct_answer);
+        const selected = isCorrect ? q.correct_answer : (wrongOpts[0] || 'A');
+        return {
+            question_id: q.id,
+            is_correct: isCorrect,
+            response_time_ms: 12000,
+            selected_option: selected
+        }
+    });
+    
+    submitQuiz();
 }
 
 function showScreen(screenName) {
@@ -103,7 +133,8 @@ function handleAnswer(selectedOption, btn) {
     answers.push({
         question_id: q.id,
         is_correct: isCorrect,
-        response_time_ms: rt
+        response_time_ms: rt,
+        selected_option: selectedOption
     });
     
     setTimeout(() => {
@@ -162,13 +193,16 @@ function renderResults(data) {
     Object.keys(summary).forEach(cid => {
         const score = summary[cid].p_l || 0;
         const pct = Math.round(score * 100);
+        // Use concept_names map from backend, fallback to concept ID
+        const nameMap = data.concept_names || {};
+        const displayName = nameMap[cid] || `Concept ${cid}`;
         
         const row = document.createElement('div');
         row.className = 'mastery-row';
         
         row.innerHTML = `
             <div class="mastery-label">
-                <span>Concept ${cid}</span>
+                <span>${displayName} <span style="opacity:0.5">(${cid})</span></span>
                 <span>${pct}%</span>
             </div>
             <div class="mastery-bar-bg">
@@ -190,15 +224,96 @@ function renderResults(data) {
         li.textContent = sugg;
         
         if (sugg.toLowerCase().includes("mastery")) li.style.borderLeftColor = 'var(--success)';
-        else if (sugg.toLowerCase().includes("review")) li.style.borderLeftColor = 'var(--danger)';
+        else if (sugg.toLowerCase().includes("review") || sugg.toLowerCase().includes("failing")) li.style.borderLeftColor = 'var(--danger)';
         else li.style.borderLeftColor = 'var(--warning)';
         
         ui.suggestionsList.appendChild(li);
     });
+    
+    // Render AI Tutor Interventions
+    if (data.tutoring_interventions && data.tutoring_interventions.length > 0) {
+        ui.tutorPanel.style.display = 'block';
+        ui.tutorInterventionsList.innerHTML = '';
+        
+        data.tutoring_interventions.forEach(intervention => {
+            const card = document.createElement('div');
+            card.className = 'intervention-card';
+            const conceptLabel = intervention.concept_name || `Concept ${intervention.concept_id}`;
+            const masteryPct = intervention.mastery_at_turn ? `${Math.round(intervention.mastery_at_turn * 100)}%` : '';
+            const misconception = intervention.misconception_tag 
+                ? `<span class="misconception-badge">${intervention.misconception_tag.replace(/_/g, ' ')}</span>` 
+                : '';
+            
+            card.innerHTML = `
+                <div class="intervention-header">
+                    <span class="concept-badge">${conceptLabel} (${intervention.concept_id})</span>
+                    ${masteryPct ? `<span class="mastery-micro-badge">${masteryPct} mastery</span>` : ''}
+                    ${misconception}
+                </div>
+                <div class="chat-bubbles">
+                    <div class="chat-bubble student-bubble">
+                        <div class="bubble-label">You</div>
+                        <div class="bubble-text">${intervention.student_answer}</div>
+                    </div>
+                    <div class="chat-bubble ai-bubble">
+                        <div class="bubble-label">AI Tutor</div>
+                        <div class="bubble-text">${intervention.tutor_response}</div>
+                    </div>
+                </div>
+            `;
+            ui.tutorInterventionsList.appendChild(card);
+        });
+    } else {
+        ui.tutorPanel.style.display = 'none';
+    }
+    
+    // Render Graph Trace if available
+    const graphPanel = document.getElementById('graph-panel');
+    const container = document.getElementById('kg-network');
+    
+    if (data.tracing_results && Object.keys(data.tracing_results).length > 0) {
+        graphPanel.style.display = 'block';
+        
+        // Build nodes and edges for vis.js
+        let nodesMap = new Map();
+        let edges = [];
+        
+        Object.keys(data.tracing_results).forEach(targetCid => {
+            if (!nodesMap.has(targetCid)) {
+                nodesMap.set(targetCid, { id: targetCid, label: targetCid, color: { background: '#ef4444', border: '#b91c1c' }, font: { color: 'white' }, shape: 'box' });
+            }
+            
+            const traces = data.tracing_results[targetCid];
+            traces.forEach(trace => {
+                const pCid = trace.concept_id;
+                const fCid = trace.failed_for;
+                
+                if (!nodesMap.has(pCid)) {
+                    nodesMap.set(pCid, { id: pCid, label: `${pCid}\n(Mastery: ${(trace.mastery * 100).toFixed(0)}%)`, color: { background: '#f59e0b', border: '#d97706' }, font: { color: 'white' }, shape: 'box' });
+                }
+                
+                edges.push({ from: pCid, to: fCid, arrows: 'to', color: { color: 'rgba(255,255,255,0.4)' }, dashes: true });
+            });
+        });
+        
+        const networkData = {
+            nodes: new vis.DataSet(Array.from(nodesMap.values())),
+            edges: new vis.DataSet(edges)
+        };
+        const options = {
+            layout: { hierarchical: { direction: 'UD', sortMethod: 'directed' } },
+            physics: false,
+            interaction: { dragNodes: false, dragView: true, zoomView: true }
+        };
+        new vis.Network(container, networkData, options);
+    } else {
+        graphPanel.style.display = 'none';
+    }
 }
 
 function resetQuiz() {
     ui.startBtn.textContent = 'Start Assessment';
+    if(ui.simulateBtn) ui.simulateBtn.textContent = 'Simulate Struggling Student';
     showScreen('start');
 }
 

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Synapse | Intelligent Quiz Engine</title>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <link rel="stylesheet" href="/static/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
@@ -22,7 +23,10 @@
                     <li><strong>Practice Phase:</strong> Remaining questions track your concept mastery dynamically.</li>
                 </ul>
             </div>
-            <button id="start-btn" class="primary-btn">Start Assessment</button>
+            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                <button id="start-btn" class="primary-btn">Start Assessment</button>
+                <button id="simulate-struggling-btn" class="secondary-btn" style="background: rgba(239, 68, 68, 0.2); color: #f87171; border-color: #f87171;">Simulate Struggling Student</button>
+            </div>
         </div>
 
         <!-- Quiz Screen -->
@@ -69,8 +73,26 @@
                     </ul>
                 </div>
             </div>
+
+            <!-- AI Tutor Interventions -->
+            <div class="glass-panel tutor-panel" style="margin-top: 20px; display: none;" id="tutor-panel">
+                <h3>AI Tutor Interventions</h3>
+                <p style="font-size: 0.9em; color: var(--text-muted); margin-bottom: 10px;">The AI Tutor stepped in to help clarify these concepts when you struggled.</p>
+                <div id="tutor-interventions-list" class="interventions-container">
+                    <!-- Tutor interactions injected here -->
+                </div>
+            </div>
+
+            <!-- Graph Visualizer -->
+            <div class="glass-panel graph-panel" style="margin-top: 20px; display: none;" id="graph-panel">
+                <h3>Knowledge Graph Trace</h3>
+                <p style="font-size: 0.9em; color: var(--text-muted); margin-bottom: 10px;">The graph below traces concepts you struggled with back to their failing prerequisites.</p>
+                <div id="kg-network" style="width: 100%; height: 350px; background: rgba(0,0,0,0.2); border-radius: 8px;"></div>
+            </div>
             
-            <button id="restart-btn" class="secondary-btn">Retake Assessment</button>
+            <div style="margin-top: 30px;">
+                <button id="restart-btn" class="secondary-btn">Retake Assessment</button>
+            </div>
         </div>
     </div>
 
