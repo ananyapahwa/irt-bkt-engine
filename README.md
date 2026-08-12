@@ -84,7 +84,10 @@ Here is a glimpse of the Interactive Quiz Engine in action:
 **2. AI Tutor Interventions**
 ![AI Tutor Intervention](assets/tutor_intervention.png)
 
-**3. Knowledge Graph Prerequisite Tracing**
+**3. RAG/LLM Socratic Tutoring**
+![RAG LLM Answers](assets/rag_llm_answers.png)
+
+**4. Knowledge Graph Prerequisite Tracing**
 ![Prerequisite Trace](assets/knowledge_graph.png)
 
 ---
