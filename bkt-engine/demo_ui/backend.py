@@ -180,8 +180,14 @@ def submit_quiz(req: QuizSubmitRequest):
                 # Fallback: pick the first available tag
                 misconception_tag = next(iter(tags_map.values()))
         
+        student_selected_text = q_info.get("options", {}).get(p_ans.selected_option, "[Incorrect Option]")
         try:
-            result = orchestrator.process_answer(pq, correct_answer=correct_answer, misconception_tag=misconception_tag)
+            result = orchestrator.process_answer(
+                pq, 
+                correct_answer=correct_answer, 
+                misconception_tag=misconception_tag,
+                student_selected_text=student_selected_text
+            )
         except Exception as e:
             print(f"RAG processing error for {pq.question_id}: {e}")
             # Fall back to BKT-only processing

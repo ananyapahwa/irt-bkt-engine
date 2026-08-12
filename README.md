@@ -74,6 +74,21 @@ Delivers grounded, adaptive Socratic interventions.
 
 ---
 
+## 📸 UI Screenshots
+
+Here is a glimpse of the Interactive Quiz Engine in action:
+
+**1. Mastery Summary & Diagnostics**
+![Mastery Summary](assets/mastery_summary.png)
+
+**2. AI Tutor Interventions**
+![AI Tutor Intervention](assets/tutor_intervention.png)
+
+**3. Knowledge Graph Prerequisite Tracing**
+![Prerequisite Trace](assets/knowledge_graph.png)
+
+---
+
 ## 🛠️ CLI Tools
 
 Both the IRT and RAG engines ship with dedicated CLIs for testing and data pipeline execution.

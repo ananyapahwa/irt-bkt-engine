@@ -44,7 +44,8 @@ class RAGOrchestrator:
         self, 
         question: PracticeQuestion, 
         correct_answer: str, 
-        misconception_tag: Optional[str] = None
+        misconception_tag: Optional[str] = None,
+        student_selected_text: Optional[str] = None
     ) -> SessionResult:
         """
         Process an answer through BKT, and if mastery drops below threshold, 
@@ -73,11 +74,13 @@ class RAGOrchestrator:
                 query_str = misconception_tag if misconception_tag else None
                 retrieved_chunks = retrieve(concept_id=concept_id, query=query_str, top_k=TOP_K_CHUNKS)
                 
+                actual_answer = student_selected_text if student_selected_text else ("[Incorrect Option]" if not question.is_correct else "[Correct Option]")
+                
                 # Build context
                 context = TutoringContext(
                     concept_id=concept_id,
                     concept_name=concept_name,
-                    student_answer="[Incorrect Option]" if not question.is_correct else "[Correct Option]",
+                    student_answer=actual_answer,
                     correct_answer=correct_answer,
                     misconception_tag=misconception_tag,
                     mastery_probability=new_mastery,
@@ -93,7 +96,7 @@ class RAGOrchestrator:
                 tutoring_turn = TutoringTurn(
                     session_id=self.session.session_id,
                     concept_id=concept_id,
-                    student_answer="[Incorrect Option]" if not question.is_correct else "[Correct Option]",
+                    student_answer=actual_answer,
                     misconception_tag=misconception_tag,
                     retrieved_chunk_ids=tutor_response.retrieved_chunk_ids,
                     theta=self.bkt.student.theta,
